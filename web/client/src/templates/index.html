@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="main.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script
+        src="http://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    <canvas id="myLineChart" height="70px" width="300px"></canvas>
+    <h2 style="text-align: center">Streaming data</h2>
+    <canvas id="StreamChart" height="70px" width="300px"></canvas>
+   
+
+</body>
+   <script>
+      setTimeout(function(){
+         location.reload();
+      },10000);
+      var rawfile = '{{ msg }}';
+      var jsonfile = JSON.parse(rawfile.replace(/&#39;/g,'"'))
+      jsonfile.sort((a, b) => Number(a.id) - Number(b.id));
+      console.log(jsonfile);
+
+      var labels = jsonfile.map(function(e) {
+         return e.year;
+      });
+      var predicted_gallons = jsonfile.map(function(e) {
+         return e.predicted_gallons;
+      });
+       var temperature = jsonfile.map(function(e){
+         return e.temperature
+      });
+      var actual_gallons = jsonfile.map(function(e) {
+         return e.gallons;
+      });
+      
+
+      var ctx = myLineChart.getContext('2d');
+      var config = {
+         type: 'line',
+         data: {
+            labels: labels,
+            datasets: [{
+               label: 'Water usage prediction',
+               data: predicted_gallons,
+               backgroundColor: 'rgba(0, 119, 204, 0.3)',
+               fill:true
+            },
+            {
+               label: 'Actual water usage',
+               data: actual_gallons,
+               borderColor: 'rgba(140, 20, 252, 1)',
+               fill:false,
+               pointRadius:2
+               },
+             {
+               label:"Temperature",
+               data: temperature,
+               borderColor: "rgba(225,0,0,0.4)",
+               fill:false,
+               pointRadius:2
+               }
+            ]
+         }
+      };
+
+      var chart = new Chart(ctx, config);
+
+      //------------------------------------Streaming-----------------------------------
+      var rawfile2 = '{{ stream_msg }}';
+      var jsonfile = JSON.parse(rawfile2.replace(/&#39;/g,'"'))
+      jsonfile.sort((a, b) => Number(a.id) - Number(b.id));
+
+      var labels2 = jsonfile.map(function(e) {
+         return e.year;
+      });
+      var predicted_gallons2 = jsonfile.map(function(e) {
+         return e.predicted_gallons;
+      });
+       var temperature2 = jsonfile.map(function(e){
+         return e.temperature
+      });
+      var actual_gallons2 = jsonfile.map(function(e) {
+         return e.gallons;
+      });
+      
+
+      var ctx2 = StreamChart.getContext('2d');
+      var config2 = {
+         type: 'line',
+         data: {
+            labels: labels2,
+            datasets: [{
+               label: 'Water usage prediction',
+               data: predicted_gallons2,
+               backgroundColor: 'rgba(0, 119, 204, 0.3)',
+               fill:true
+            },
+            {
+               label:"Temperature",
+               data: temperature2,
+               borderColor: "rgba(225,0,0,0.4)",
+               fill:false,
+               pointRadius:2
+               }
+            ]
+         }
+      };
+
+      var chart = new Chart(ctx2, config2);
+   </script>
+</html>
