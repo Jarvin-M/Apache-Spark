@@ -1,11 +1,9 @@
-# 2019_group_4_s3555631_s3795748_s3878708
 ## Authors
--   Chriss Santi
--   Jarvin
--   Hillary
+-   Chriss Santi - Docker and Environment setup
+-   Jarvin Mutatiina - PySpark
 
 ## Description
-This project is about building a platform for scalable computing
+This project is water usage prediction pipeline using Apache Spark and Docker
 
 ## Techs
 
